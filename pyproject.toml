@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pluggy-pfm"
+version = "0.1.0"
+description = "personal finance app build with Pluggy API"
+authors = ["Heitor Carvalho Pinheiro <heitor.c.pinheiro@hotmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+python-dotenv = "^1.0.1"
+httpx = "^0.26.0"
+asyncio = "^3.4.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
