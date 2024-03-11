@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 import httpx
-from .baseApi import BaseApi
+from .base_api import BaseApi
 from .protocols.auth import ConnectTokenOptions
 from .protocols.connector import ConnectorFilters
 from .protocols.account import AccountType, Account
@@ -18,355 +18,367 @@ from .protocols.income_report import IncomeReport
 
 
 class PluggyClient(BaseApi):
-    def __init__(self, clientId: str, clientSecret: str, session: httpx.AsyncClient, baseUrl: str = None, apiKey: str | None = None):
-        super().__init__(clientId, clientSecret, session, baseUrl, apiKey) 
+    def __init__(self, client_id: str, client_secret: str, session: httpx.AsyncClient, base_url: str = None, api_key: str | None = None):
+        super().__init__(client_id, client_secret, session, base_url, api_key) 
 
-    async def fetchConnectors(self, options:ConnectorFilters = {}):
+    async def fetch_connectors(self, options: ConnectorFilters = {}):
         """"Fetch all available connectors""" 
-        return await self.createGetRequest('connectors', options) 
+        return await self.create_get_request('connectors', options) 
     
-    async def fetchConnector(self, id:int):
+    async def fetch_connector(self, id:int):
         """Fetch a single connector""" 
-        return await self.createGetRequest(endpoint=f'connectors/{id}') 
+        return await self.create_get_request(endpoint=f'connectors/{id}') 
     
-    async def createItem(self, connectorId:int, params: Optional[Dict[str,str]], body:Optional[Dict[str,str]], options: Optional[str]=None):
-            
+    async def create_item(self, connector_id:int, params: Optional[Dict[str,str]], body: Optional[Dict[str,str]], options: Optional[str]=None):
+        """Creates an item 
+        
+        Parameters
+        ----------
+        * connector_id (int): The Connector's id 
+        * parameters: A map of name and value for the needed credentials 
+        * options Options available to set to the item 
+
+        Returns
+        ------- 
+        * Item: a item object
+        """
+
         body = {"parameters":{
         key : value for key, value in body.items() if value is not None
         },
-        "connectorId":connectorId} 
+        "connectorId":connector_id} 
 
-        return await self.createPostRequest(endpoint='items', params=None, body=body)
+        return await self.create_post_request(endpoint='items', params=None, body=body)
 
-    async def fetchItem(self, id:int):
+    async def fetch_item(self, id:int):
         """Retreives a specific Item by its ID"""
-        return await self.createGetRequest(f'items/{id}')  
+        return await self.create_get_request(f'items/{id}')  
     
-    async def validateParameters(self, id:int, parameters: Parameters) -> ValidationResult: 
+    async def validate_parameters(self, id: int, parameters: Parameters) -> ValidationResult: 
+        """Check that connector parameters are valid
+
+        Parameters
+        ----------
+        * id (int): The Connector ID
+        * parameters (Parameters): A map of name and value for the credentials to be validated
+
+        Returns
+        ------- 
+        * ValidationResult: An object with the info of which parameters are wrong
         """
-        Check that connector parameters are valid
-        
-        :param str id: The Connector ID
-        :param dict parameters: A dictionary of name and value for the credentials to be validated
-        :return: an object with the info of which parameters are wrong
-        :rtype: ValidationResult
-        """
-        return await self.createPostRequest(f'connectors/{id}/validate', None, parameters)
-    
-    ###TEST HERE
-    async def deleteItem(self, id:str):
+        return await self.create_post_request(f'connectors/{id}/validate', None, parameters)
+
+    async def delete_item(self, id: str):
         """Deletes an Item by its ID""" 
-        return await self.createDeleteRequest(f'items/{id}') 
+        return await self.create_delete_request(f'items/{id}') 
 
-    ###TEST HERE
-    async def updateItem(self, id:str, parameters:Optional[Dict[str, str]]=None, options: Optional[CreateItemOptions]=None) -> Item:
-        """
-        Updates an item
+    async def update_item(self, id: str, parameters: Optional[Dict[str, str]] = None, options: Optional[CreateItemOptions] = None) -> Item:
+        """Updates an item
 
         Parameters
         ----------
-        id -- The Item ID
-        parameters (Optional) -- A map of name and value for the credentials to be updated.
-        if none submitted, an Item update will be attempted with the latest used credentials.
-        
-        Returns
-        ------- 
-        Item: an item object
-        """
-        return await self.createPatchRequest(f'items/{id}', None, {'id':id, 'parameters':parameters, 'options': options})
-    
-    async def updateItemMFA(self, id:str, parameters:object):
-        """
-        This endpoint receives an object with the MFA parameter name (aka 'token') as key.
-        This name is obtained from parameter field in an item in USER_WAITING_INPUT status. 
-
-        Args:
-            - id (str) : item Id
-        """
-        return await self.createPostRequest(f'items/{id}/mfa', None, parameters)
-
-    async def fetchAccounts(self, itemId:str, type:Optional[AccountType]=None): 
-        params = {'itemId':itemId, 'type':type}
-        return await self.createGetRequest(endpoint='accounts', params=params) 
-    
-    async def fetchAccount(self, id:str) -> Account:
-        """
-        Fetch a single account
-        
-        Args:
-            - id(str) : Account Id 
+        * id (str): The Item ID
+        * parameters (Optional[Dict[str, str]]): A map of name and value for the credentials to be updated.
+        If none submitted, an Item update will be attempted with the latest used credentials.
+        * options (Optional[CreateItemOptions]): Options available to set to the item
 
         Returns
         ------- 
-        Account: An account object 
+        * Item: An item object
         """
-        return await self.createGetRequest(endpoint=f'accounts/{id}') 
-    
-    async def fetchTransactions(self, accountId:str, options:TransactionFilters = {}) -> PageResponse:
-        """Fetch transactions from an account"""  
-        return await self.createGetRequest(endpoint='transactions', params={**options, 'accountId':accountId})
+        return await self.create_patch_request(f'items/{id}', None, {'id': id, 'parameters': parameters, 'options': options})
 
-    async def fetchAllTransactions(self, accountId:str) -> list[Transaction]:
-        """
-        Fetch all transactions from an account
+    async def update_item_mfa(self, id: str, parameters: object):
+        """This endpoint receives an object with the MFA parameter name (aka 'token') as key.
+        This name is obtained from parameter field in an item in USER_WAITING_INPUT status.
 
         Parameters
         ----------
-        account_id(str): The account id
+        * id (str): Item Id
+        """
+        return await self.create_post_request(f'items/{id}/mfa', None, parameters)
+
+    async def fetch_accounts(self, item_id: str, type: Optional[AccountType] = None): 
+        """Fetch accounts
+
+        Parameters
+        ----------
+        * item_id (str): The item id
+        * type (Optional[AccountType]): Account type
 
         Returns
         -------
-        List : An array of transactions
+        * PageResponse: Paged response of accounts
         """
+        params = {'itemId': item_id, 'type': type}
+        return await self.create_get_request(endpoint='accounts', params=params) 
 
+    async def fetch_account(self, id: str) -> Account:
+        """Fetch a single account
+
+        Parameters
+        ----------
+        * id (str): Account Id 
+
+        Returns
+        ------- 
+        * Account: An account object 
+        """
+        return await self.create_get_request(endpoint=f'accounts/{id}') 
+
+    async def fetch_transactions(self, account_id: str, options: TransactionFilters = {}) -> PageResponse:
+        """Fetch transactions from an account"""  
+        return await self.create_get_request(endpoint='transactions', params={**options, 'accountId': account_id})
+
+    async def fetch_all_transactions(self, account_id: str) -> list[Transaction]:
+        """Fetch all transactions from an account
+
+        Parameters
+        ----------
+        * account_id (str): The account id
+
+        Returns
+        -------
+        * list: An array of transactions
+        """
         MAX_PAGE_SIZE = 500
         
-        result = await self.fetchTransactions(accountId, options={'pageSize': MAX_PAGE_SIZE})
+        result = await self.fetch_transactions(account_id, options={'pageSize': MAX_PAGE_SIZE})
 
         if result['totalPages'] == 1:
             return result['results'] 
         
         else: 
             transactions = []
-
             page = 1
 
             while page < result['totalPages']: 
-
-                paginatedTransaction = await self.fetchTransactions(accountId, options={'page': page})
-
-                print(paginatedTransaction['results'])
-
-                transactions.extend(paginatedTransaction)
-
-                page+=1
+                paginated_transaction = await self.fetch_transactions(account_id, options={'page': page})
+                transactions.extend(paginated_transaction)
+                page += 1
 
             return transactions 
 
-    async def updateTransactionCategory(self, id:str, categoryId:str) -> Transaction:
+    async def update_transaction_category(self, id: str, category_id: str) -> Transaction:
         """Post user category for transaction""" 
-        return await self.createPatchRequest(f'transactions/{id}', None, {'categoryId':categoryId})
- 
-    async def fetchTransaction(self, id:str) -> Transaction:
-        """
-        Fetch a single transaction
-        
-        Parameters
-        ----------
-        id : The transaction Id 
+        return await self.create_patch_request(f'transactions/{id}', None, {'categoryId': category_id})
 
-        Returns
-        -------
-        Transaction: a Transaction object
-        """
-        return await self.createGetRequest(f'transactions/{id}') 
-
-    async def fetchInvestments(self, item_id:str, type:InvestmentType, options:InvestmentsFilters = {}) -> PageResponse:
-        """
-        Fetch Investments from an Item 
+    async def fetch_transaction(self, id: str) -> Transaction:
+        """Fetch a single transaction
 
         Parameters
         ----------
-        item_id: the Item Id
+        * id (str): The transaction Id 
 
         Returns
         -------
-        PageResponse(Investment): paged response of investments
+        * Transaction: A Transaction object
         """
+        return await self.create_get_request(f'transactions/{id}') 
 
-        return await self.createGetRequest('investments', {'options': options, 'itemId':item_id, 'type':type})
-
-    async def fetchInvestment(self, id:str) -> Investment:
-        """
-        Fetch a single investment
+    async def fetch_investments(self, item_id: str, type: InvestmentType, options: InvestmentsFilters = {}) -> PageResponse:
+        """Fetch Investments from an Item 
 
         Parameters
         ----------
-        id: the investment id
+        * item_id (str): The Item Id
 
         Returns
         -------
-        Investment: an investment object
+        * PageResponse: Paged response of investments
         """
-        return await self.createGetRequest(f'investments/{id}') 
-    
-    async def fetchInvestmentTransactions(self, investment_id:str, options:TransactionFilters = {}) -> PageResponse:
+        return await self.create_get_request('investments', {'options': options, 'itemId': item_id, 'type': type})
 
-        """
-        Fetch transactions from an investment
+    async def fetch_investment(self, id: str) -> Investment:
+        """Fetch a single investment
 
         Parameters
         ----------
-        investment_id: the investment id
-        options[TransactionsFilters]: Transaction options to filter
+        * id (str): The investment id
 
         Returns
         -------
-        PageResponse[List[InvestmentTransaction]] object which contains the transactions list and related paging data
+        * Investment: An investment object
         """
+        return await self.create_get_request(f'investments/{id}') 
 
-        return await self.createGetRequest(f'investments/{investment_id}/transactions', {
-            'options':options, 'investmentId':investment_id
-        })
-    
-    async def fetchOpportunities(self, item_id:str, options: OpportunityFilters = {}) -> PageResponse:
-        """
-        Fetch opportunities from an Item 
+    async def fetch_investment_transactions(self, investment_id: str, options: TransactionFilters = {}) -> PageResponse:
+        """Fetch transactions from an investment
 
         Parameters
         ----------
-        item_id: the Item id
-        options: request search filters
+        * investment_id (str): The investment id
+        * options (TransactionFilters): Transaction options to filter
 
         Returns
         -------
-        PageResponse paged response of opportunities
+        * PageResponse[List[InvestmentTransaction]]: Object which contains the transactions list and related paging data
         """
-        return await self.createGetRequest('oportunities', {'options':options, 'itemId':item_id}) 
+        return await self.createGetRequest(f'investments/{investment_id}/transactions', {'options': options, 'investmentId': investment_id})
 
-    async def fetchLoans(self, item_id:str, options: PageFilters = {}) -> PageResponse:
-        """
-        Fetch loans from an Item
+    async def fetch_opportunities(self, item_id: str, options: OpportunityFilters = {}) -> PageResponse:
+        """Fetch opportunities from an Item 
 
         Parameters
         ----------
-        item_id: the Item id
-        options: request search filters
+        * item_id (str): The Item id
+        * options (OpportunityFilters): Request search filters
 
         Returns
         -------
-        PageResponse: paged response of loans
+        * PageResponse: Paged response of opportunities
         """
+        return await self.create_get_request('opportunities', {'options': options, 'itemId': item_id}) 
 
-        return await self.createGetRequest('loans', {'options':options, 'itemId':item_id})
-    
-    async def fetchLoan(self, id:str) -> Loan:
-        """
-        Fetch loan by id
+    async def fetch_loans(self, item_id: str, options: PageFilters = {}) -> PageResponse:
+        """Fetch loans from an Item
 
         Parameters
         ----------
-        id: the Loan id
+        * item_id (str): The Item id
+        * options (PageFilters): Request search filters
 
         Returns
         -------
-        Loan - loan object, if found
+        * PageResponse: Paged response of loans
         """
-        return await self.createGetRequest(f'loans/{id}') 
-    
-    async def fetchIdentity(self, id:str) -> IdentityResponse:
-        """
-        Fetch the identity resource
+        return await self.create_get_request('loans', {'options': options, 'itemId': item_id})
+
+    async def fetch_loan(self, id: str) -> Loan:
+        """Fetch loan by id
+
+        Parameters
+        ----------
+        * id (str): The Loan id
 
         Returns
         -------
-        IdentityResponse - an identity object
+        * Loan: Loan object, if found
         """
-        return await self.createGetRequest(f'identity/{id}')
-    
-    async def fetchIdentityByItemId(self, item_id:str) -> IdentityResponse:
-        """
-        Fetch the identity resource by it's Item ID
+        return await self.create_get_request(f'loans/{id}') 
+
+    async def fetch_identity(self, id: str) -> IdentityResponse:
+        """Fetch the identity resource
 
         Returns
         -------
-        IdentityResponse - an identity object
+        * IdentityResponse: An identity object
         """
-        return await self.createGetRequest(f'identity?itemId={item_id}')
+        return await self.create_get_request(f'identity/{id}')
 
-    async def fetchCategories(self) -> PageResponse:
+    async def fetch_identity_by_item_id(self, item_id: str) -> IdentityResponse:
+        """Fetch the identity resource by its Item ID
+
+        Parameters
+        ----------
+        * item_id (str): The Item ID
+
+        Returns
+        -------
+        * IdentityResponse: An identity object
+        """
+        return await self.create_get_request(f'identity?itemId={item_id}')
+
+    async def fetch_categories(self) -> PageResponse:
         """Fetch all available categories
         
         Returns
         -------
-        Category - a page response of categories
+        * PageResponse: A page response of categories
         """
-        return await self.createGetRequest('categories') 
-    
-    async def fetchCategory(self, id:str) -> Category:
-        """Fetch a simgle category
+        return await self.create_get_request('categories') 
+
+    async def fetch_category(self, id: str) -> Category:
+        """Fetch a single category
         
         Parameters
         ----------
-        id: the category id
+        * id (str): The category ID
 
         Returns
         -------
-        Category - a category object
+        * Category: A category object
         """
-        return await self.createGetRequest(f'categories/{id}') 
-    
-    async def fetchWebhooks(self) -> PageResponse:
-        """ 
-        Fetch all available webhooks 
+        return await self.create_get_request(f'categories/{id}') 
+
+    async def fetch_webhooks(self) -> PageResponse:
+        """Fetch all available webhooks 
 
         Returns
         -------
-        PageResponse[Webhook] - a paging response of a webhook
+        * PageResponse[Webhook]: A paging response of webhooks
         """
-        return await self.createGetRequest('webhooks') 
-    
-    async def fetchWebhook(self, id:str) -> Webhook:
-        """ 
-        Fetch a single webhook
+        return await self.create_get_request('webhooks') 
+
+    async def fetch_webhook(self, id: str) -> Webhook:
+        """Fetch a single webhook
+
+        Parameters
+        ----------
+        * id (str): The webhook ID
 
         Returns
         -------
-        Webhook - a webhook object
+        * Webhook: A webhook object
         """
-        return await self.createGetRequest(f'webhooks/{id}') 
-    
-    async def createWebHook(self, event:WebhookEvent, url: str, headers:Optional[Dict[str, str]] = None) -> Webhook:
-        """
-        Creates a Webhook.
+        return await self.create_get_request(f'webhooks/{id}') 
+
+    async def create_webhook(self, event: WebhookEvent, url: str, headers: Optional[Dict[str, str]] = None) -> Webhook:
+        """Creates a webhook.
         
-        Args:
-            webhook_params (dict): The webhook parameters to create, including:
-                - url (str): The URL where notifications will be received.
-                - event (str): The event to listen for.
-                - headers (Optional[dict], optional): The headers to send with the webhook.
-                
-        Returns:
-            Webhook: The created webhook object.
-        """
-        return await self.createPostRequest('webhooks', None, {'event':event, 'url':url, 'headers':headers}) 
-    
-    async def update_webhook(self, id:str, updated_webhook_params: UpdateWebhook) -> Webhook:
-        """
-        Updates a Webhook.
-        
-        Args:
-            - id (str): The Webhook ID
-            - updatedWebhookParams - The webhook params to update
+        Parameters
+        ----------
+        * event (WebhookEvent): The event to listen for.
+        * url (str): The URL where notifications will be received.
+        * headers (Optional[Dict[str, str]], optional): The headers to send with the webhook.
             
-        Returns:
-            Webhook: The webhook updated
+        Returns
+        -------
+        * Webhook: The created webhook object.
         """
-        return await self.createPatchRequest(f'webhooks/{id}', None, updated_webhook_params)  
-    
-    async def delete_webhook(self, id:str) -> None: 
-        """
-        Deletes a Webhook
-        """
-        return await self.createDeleteRequest(f'webhooks/{id}') 
-    
-    async def fetch_income_reports(self, item_id:str) -> PageResponse:
-        """
-        Fetches all income reports for the past years provided by the Financial Institution.
+        return await self.create_post_request('webhooks', None, {'event': event, 'url': url, 'headers': headers}) 
 
-        Args:
-            - item_id (str): The Item ID to fetch income reports for. 
-        Returns:
-            - PageResponse: Paged response of income reports.
+    async def update_webhook(self, id: str, updated_webhook_params: UpdateWebhook) -> Webhook:
+        """Updates a webhook.
+        
+        Parameters
+        ----------
+        * id (str): The webhook ID
+        * updated_webhook_params (UpdateWebhook): The webhook parameters to update
+            
+        Returns
+        -------
+        * Webhook: The updated webhook
         """
-        return await self.createGetRequest('income-reports', params={'itemId':item_id})
+        return await self.create_patch_request(f'webhooks/{id}', None, updated_webhook_params)  
 
-    async def create_connection_token(self, item_id:str, options: Optional[ConnectTokenOptions]) -> str:
-        """
-        Creates a connect token that can be used as API KEY to connect items from the Frontend. 
+    async def delete_webhook(self, id: str) -> None: 
+        """Deletes a webhook"""
+        return await self.create_delete_request(f'webhooks/{id}') 
+
+    async def fetch_income_reports(self, item_id: str) -> PageResponse:
+        """Fetches all income reports for the past years provided by the Financial Institution.
+
+        Parameters
+        ----------
+        * item_id (str): The Item ID to fetch income reports for. 
 
         Returns
         -------
-        (str) - Access token to connect items with restrict access
+        * PageResponse: Paged response of income reports.
         """
-        return await self.createPostRequest('connect_token', None, {'itemId':item_id, 'options':options})
+        return await self.create_get_request('income-reports', params={'itemId': item_id})
+
+    async def create_connection_token(self, item_id: str, options: Optional[ConnectTokenOptions]) -> str:
+        """Creates a connection token that can be used as an API key to connect items from the frontend. 
+
+        Parameters
+        ----------
+        * item_id (str): The Item ID.
+        * options (Optional[ConnectTokenOptions]): Additional options for the connection token.
+
+        Returns
+        -------
+        * str: Access token to connect items with restricted access
+        """
+        return await self.create_post_request('connect_token', None, {'itemId': item_id, 'options': options})

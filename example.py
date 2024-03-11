@@ -1,5 +1,5 @@
 from pluggy.api.client import PluggyClient 
-from pluggy.api.baseApi import BaseApi
+from pluggy.api.base_api import BaseApi
 import asyncio
 import httpx
 import os 
@@ -28,12 +28,10 @@ async def get_api_key(session=None):
     print(api_key)
 
 async def fetch_connectors(export_to_json:bool = False):
-    """
-    Example script fetching Pluggy's Connectors
-    """
+
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-        connectors = await client.fetchConnectors()
+        connectors = await client.fetch_connectors()
 
         if export_to_json:
             json_str = json.dumps(connectors, indent=4) 
@@ -44,21 +42,17 @@ async def fetch_connectors(export_to_json:bool = False):
         print(connectors) 
 
 async def fetch_connector(connector_id:int):
-    """
-    Example script fetching Pluggy's Connector by Id
-    """
+
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-        connector = await client.fetchConnector(id=connector_id) 
+        connector = await client.fetch_connector(id=connector_id) 
         print(connector)
 
 async def fetch_categories(export_to_json:bool=False):
-    """
-    Example script fetching Pluggy's Categories
-    """
+
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
-        categories =  await client.fetchCategories()
+        categories =  await client.fetch_categories()
 
         if export_to_json:
             json_str = json.dumps(categories, indent=4) 
@@ -77,13 +71,13 @@ async def create_item():
             "password":"12345"
         }
 
-        item = await client.createItem(212, None, body=body)  
+        item = await client.create_item(212, None, body=body)  
 
 async def retrieve_item(item_id:str):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
 
-        item = await client.fetchItem(id=item_id)  
+        item = await client.fetch_item(id=item_id)  
 
         print(item)
 
@@ -96,7 +90,7 @@ async def validate_parameters(connector_id):
             "password":123478
         } 
 
-        result = await client.validateParameters(connector_id, parameters=parameters) 
+        result = await client.validate_parameters(connector_id, parameters=parameters) 
 
         print(result) 
 
@@ -104,20 +98,20 @@ async def delete_item(item_id):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
 
-        return await client.deleteItem(item_id)  
+        return await client.delete_item(item_id)  
     
 async def update_item(item_id):
     try:
         async with httpx.AsyncClient() as session:
             client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
-            await client.updateItem(item_id)
+            await client.update_item(item_id)
     except Exception as e:
         raise e
 
 @inject_session
 async def retrieve_all_transactions(account_id, export_to_json:bool = True, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-    txs = await client.fetchAllTransactions(account_id) 
+    txs = await client.fetch_all_transactions(account_id) 
     print(txs) 
 
     if export_to_json:
@@ -128,31 +122,31 @@ async def retrieve_all_transactions(account_id, export_to_json:bool = True, sess
 async def retrieve_accounts(item_id): 
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
-        accounts = await client.fetchAccounts(itemId=item_id, type='CREDIT') 
+        accounts = await client.fetch_accounts(itemId=item_id, type='CREDIT') 
         print(accounts) 
 
 async def retrieve_account(account_id:str):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-        account = await client.fetchAccount(account_id) 
+        account = await client.fetch_account(account_id) 
         print(account) 
 
 @inject_session
 async def fetch_transactions(account_id, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-    txs = await client.fetchTransactions(account_id) 
+    txs = await client.fetch_transactions(account_id) 
     print(txs)
 
 @inject_session
 async def fetch_transaction(tx_id, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-    tx = await client.fetchTransaction(tx_id) 
+    tx = await client.fetch_transaction(tx_id) 
     print(tx)
 
 @inject_session
 async def fetch_all_transactions(account_id, session=None, export_to_json:bool=False):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-    txs = await client.fetchAllTransactions(account_id) 
+    txs = await client.fetch_all_transactions(account_id) 
     print(txs) 
     if export_to_json:
         json_str = json.dumps(txs, indent=4) 
@@ -164,7 +158,7 @@ async def fetch_all_transactions(account_id, session=None, export_to_json:bool=F
 async def update_txs_category(tx_id, category_id, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
     try:
-        await client.updateTransactionCategory(tx_id, category_id) 
+        await client.update_transaction_category(tx_id, category_id) 
     except BaseException as e:
         print(f"An Exception occured {e}")
         raise e
@@ -175,20 +169,20 @@ async def fetch_opportunities(item_id:str, session=None):
 
     options = {'page':1, 'pageSize':20}
 
-    opportunities = await client.fetchOpportunities(item_id, options) 
+    opportunities = await client.fetch_opportunities(item_id, options) 
     print(opportunities) 
 
 @inject_session
 async def fetch_loans(item_id, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
-    loans = await client.fetchLoans(item_id) 
+    loans = await client.fetch_loans(item_id) 
     print(loans)  
 
 @inject_session 
 async def retrieve_identity(item_id: str, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
 
-    identity = await client.fetchIdentityByItemId(item_id) 
+    identity = await client.fetch_identity_by_item_id(item_id) 
     print(identity)  
 
 @inject_session
@@ -197,7 +191,13 @@ async def retrieve_income_reports(item_id, session=None):
 
     report = await client.fetch_income_reports(item_id) 
 
-    print(report)
+    print(report) 
+
+@inject_session 
+async def create_webhook(session=None):
+    client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session) 
+
+    await client.create_webhook()
 
 if __name__ == "__main__":
     asyncio.run(fetch_connectors())
