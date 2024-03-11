@@ -1,20 +1,20 @@
 from typing import Dict, Optional
 import httpx
 from .base_api import BaseApi
-from .protocols.auth import ConnectTokenOptions
-from .protocols.connector import ConnectorFilters
-from .protocols.account import AccountType, Account
-from .protocols.transaction import TransactionFilters, Transaction
-from .protocols.common import PageResponse, PageFilters 
-from .protocols.category import Category
-from .protocols.item import Parameters, CreateItemOptions, Item
-from .protocols.opportunity import Opportunity, OpportunityType, OpportunityFilters
-from .protocols.validation import ValidationResult
-from .protocols.investment import Investment, InvestmentTransaction, InvestmentType, InvestmentsFilters
-from .protocols.loans import Loan
-from .protocols.identity import IdentityResponse 
-from .protocols.webhook import Webhook, CreateWebhook, UpdateWebhook, WebhookEvent
-from .protocols.income_report import IncomeReport
+from .typing.auth import ConnectTokenOptions
+from .typing.connector import ConnectorFilters
+from .typing.account import AccountType, Account
+from .typing.transaction import TransactionFilters, Transaction
+from .typing.common import PageResponse, PageFilters 
+from .typing.category import Category
+from .typing.item import Parameters, CreateItemOptions, Item
+from .typing.opportunity import Opportunity, OpportunityType, OpportunityFilters
+from .typing.validation import ValidationResult
+from .typing.investment import Investment, InvestmentTransaction, InvestmentType, InvestmentsFilters
+from .typing.loans import Loan
+from .typing.identity import IdentityResponse 
+from .typing.webhook import Webhook, CreateWebhook, UpdateWebhook, WebhookEvent
+from .typing.income_report import IncomeReport
 
 
 class PluggyClient(BaseApi):

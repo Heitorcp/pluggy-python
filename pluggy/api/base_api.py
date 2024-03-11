@@ -2,7 +2,7 @@ import json as json
 import requests
 from .config import Config
 from typing import Any, Optional, Dict, Union, List
-from pluggy.api.protocols.common import PageResponse
+from pluggy.api.typing.common import PageResponse
 import httpx
 from typing import TypedDict
 

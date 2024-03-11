@@ -1,6 +1,6 @@
 from dataclasses import dataclass 
 from typing import Literal, List, TypedDict
-from pluggy.api.protocols.common import CurrencyCode, PageFilters
+from pluggy.api.typing.common import CurrencyCode, PageFilters
 import datetime
 
 INVESTMENT_TYPES = [

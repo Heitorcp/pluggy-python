@@ -1,4 +1,4 @@
-from pluggy.api.protocols.common import CurrencyCode 
+from pluggy.api.typing.common import CurrencyCode 
 from enum import Enum 
 from dataclasses import dataclass
 from datetime import datetime

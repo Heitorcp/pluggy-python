@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from pluggy.api.protocols.common import PageResponse
+from pluggy.api.typing.common import PageResponse
 from typing import Generic
 
 @dataclass
