@@ -1,8 +1,9 @@
-from dataclasses import dataclass 
+from dataclasses import dataclass
+
 
 @dataclass
 class IncomeReport:
-    # year of the report 
-    year: str 
-    # url to download the income report pdf 
+    # year of the report
+    year: str
+    # url to download the income report pdf
     url: str

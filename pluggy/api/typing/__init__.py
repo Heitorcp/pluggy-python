@@ -1,1 +1,7 @@
-from .connector import Connector, ConnectorType, ConnectorCredential, ConnectorHealthDetails, ConnectorFilters
+from .connector import (
+    Connector,
+    ConnectorCredential,
+    ConnectorFilters,
+    ConnectorHealthDetails,
+    ConnectorType,
+)
