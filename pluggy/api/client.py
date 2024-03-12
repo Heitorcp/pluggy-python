@@ -3,29 +3,29 @@ from typing import Dict, Optional
 import httpx
 
 from .base_api import BaseApi
-from .typing.account import Account, AccountType
-from .typing.auth import ConnectTokenOptions
-from .typing.category import Category
-from .typing.common import PageFilters, PageResponse
-from .typing.connector import ConnectorFilters
-from .typing.identity import IdentityResponse
-from .typing.income_report import IncomeReport
-from .typing.investment import (
+from .type.account import Account, AccountType
+from .type.auth import ConnectTokenOptions
+from .type.category import Category
+from .type.common import PageFilters, PageResponse
+from .type.connector import ConnectorFilters
+from .type.identity import IdentityResponse
+from .type.income_report import IncomeReport
+from .type.investment import (
     Investment,
     InvestmentsFilters,
     InvestmentTransaction,
     InvestmentType,
 )
-from .typing.item import CreateItemOptions, Item, Parameters
-from .typing.loans import Loan
-from .typing.opportunity import (
+from .type.item import CreateItemOptions, Item, Parameters
+from .type.loans import Loan
+from .type.opportunity import (
     Opportunity,
     OpportunityFilters,
     OpportunityType,
 )
-from .typing.transaction import Transaction, TransactionFilters
-from .typing.validation import ValidationResult
-from .typing.webhook import CreateWebhook, UpdateWebhook, Webhook, WebhookEvent
+from .type.transaction import Transaction, TransactionFilters
+from .type.validation import ValidationResult
+from .type.webhook import CreateWebhook, UpdateWebhook, Webhook, WebhookEvent
 
 
 class PluggyClient(BaseApi):
@@ -286,7 +286,7 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse[List[InvestmentTransaction]]: Object which contains the transactions list and related paging data
         """
-        return await self.createGetRequest(
+        return await self.create_get_request(
             f'investments/{investment_id}/transactions',
             {'options': options, 'investmentId': investment_id},
         )

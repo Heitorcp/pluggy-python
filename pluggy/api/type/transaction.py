@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Literal, Optional, TypedDict
 
-from pluggy.api.typing.common import CurrencyCode, PageFilters
+from pluggy.api.type.common import CurrencyCode, PageFilters
 
 """
   TYPE: TransactionType

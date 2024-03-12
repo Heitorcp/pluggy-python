@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, TypedDict, Union
 import httpx
 import requests
 
-from pluggy.api.typing.common import PageResponse
+from pluggy.api.type.common import PageResponse
 
 from .config import Config
 
