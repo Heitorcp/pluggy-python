@@ -1,0 +1,16 @@
+site_name: Pluggy Python SDK
+repo_url: https://github.com/Heitorcp/pluggy-python 
+repo_name: Heitorcp/pluggy-python
+edit_uri: tree/main/docs
+
+theme:
+  name: material
+  language: pt-BR  
+  logo: assets/logo.webp
+  favicon: assets/pluggy-icon.svg
+
+markdown_extensions:
+  - attr_list 
+
+extra_css:
+  - stylesheets/extra.css
