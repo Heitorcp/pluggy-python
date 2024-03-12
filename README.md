@@ -5,5 +5,5 @@
 - Add AcquirerClient
 - Add PaymentClient
 - Fix Typing classes
-- Add Linter
+- ~~Add Linter~~
 - Add tests
