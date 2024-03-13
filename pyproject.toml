@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "pluggy-pfm"
+name = "pluggy-python"
 version = "0.1.0"
-description = "personal finance app build with Pluggy API"
+description = "Unofficial Python SDK for Pluggy API"
 authors = ["Heitor Carvalho Pinheiro <heitor.c.pinheiro@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -12,6 +12,7 @@ requests = "^2.31.0"
 python-dotenv = "^1.0.1"
 httpx = "^0.26.0"
 asyncio = "^3.4.3"
+mypy = "^1.9.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -42,4 +43,8 @@ build-backend = "poetry.core.masonry.api"
 
  [tool.taskipy.tasks] 
  lint = "blue . && isort ."  
- docs = "mkdocs serve"
+ docs = "mkdocs serve" 
+
+ [tool.mypy] 
+ warn_unused_configs = true 
+ 
