@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional
-
-from typing_extensions import TypedDict
+from typing import Optional, Any
 
 CURRENCY_CODES = [
     'AED',

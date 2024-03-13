@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Generic, Optional
+from typing import Optional
 
 from pluggy.api.type.common import PageResponse
 

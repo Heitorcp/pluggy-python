@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict, List
 
 
 @dataclass
@@ -11,5 +10,5 @@ class ValidationError:
 
 @dataclass
 class ValidationResult:
-    parameters: Dict[str, str]
-    errors: List[ValidationError]
+    parameters: dict[str, str]
+    errors: list[ValidationError]

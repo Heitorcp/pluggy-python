@@ -1,6 +1,6 @@
 import datetime
 from dataclasses import dataclass
-from typing import List, Literal, TypedDict
+from typing import Literal
 
 from pluggy.api.type.common import CurrencyCode, PageFilters
 
@@ -250,8 +250,8 @@ class InvestmentInstitution:
     # Number identifier for the institution CNPJ / Other
     number: str | None
 
-
-class Investment(TypedDict):
+@dataclass
+class Investment:
     id: str
     # Unique primary identifier for the investment available for the hole country. In brazil is CNPJ.
     code: str
@@ -316,7 +316,7 @@ class Investment(TypedDict):
     # * @deprecated use `client.fetchInvestmentTransactions(investmentId, searchFilters)` instead
     # * this field is null unless the application was created before 2023-03-20
     # """
-    transactions: List[InvestmentTransaction] | None
+    transactions: list[InvestmentTransaction] | None
     # Investment tax information
     metadata: InvestmentMetadata | None
     # Name of the owner

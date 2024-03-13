@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Literal, Optional
+from typing import Literal
 
 from .common import CurrencyCode, PageFilters, PageResponse
 

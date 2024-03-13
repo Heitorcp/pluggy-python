@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Dict, Literal, Optional
+from typing import Literal, Optional
 
 TriggeredBy = Literal['CLIENT', 'USER', 'SYNC', 'INTERNAL']
 
@@ -158,4 +158,4 @@ class ExecutionErrorResult:
     # Unstructured properties that provide additional context/information of the error.
     # Used for some specific cases only, such as Caixa PF & PJ.
     # @see https://docs.pluggy.ai/docs/errors-validations for more info.
-    attributes: Optional[Dict[str, str]]
+    attributes: Optional[dict[str, str]]

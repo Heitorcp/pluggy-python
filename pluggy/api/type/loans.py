@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date as Date
-from typing import List, Literal, Optional
+from typing import Literal
 
 from .common import CurrencyCode
 
@@ -205,7 +205,7 @@ class LoanInstallments:
     # float of overdue installments
     pastDueInstallments: float | None
     # List that brings the due dates and value of the non-regular installments of the contract of the type of credit consulted
-    balloonPayments: List[LoanInstallmentBalloonPayment] | None
+    balloonPayments: list[LoanInstallmentBalloonPayment] | None
 
 
 @dataclass
@@ -231,9 +231,9 @@ class LoanPaymentReleaseOverParcelCharge:
 @dataclass
 class LoanPaymentReleaseOverParcel:
     # List of fees that were paid outside the installment, only for single paymentPayment identifier under the responsibility of each transmitting Institution
-    fees: List[LoanPaymentReleaseOverParcelFee] | None
+    fees: list[LoanPaymentReleaseOverParcelFee] | None
     # List of charges that were paid out of installment
-    charges: List[LoanPaymentReleaseOverParcelCharge] | None
+    charges: list[LoanPaymentReleaseOverParcelCharge] | None
 
 
 @dataclass
@@ -257,7 +257,7 @@ class LoanPayments:
     # Amount required for the customer to settle the debt
     contractOutstandingBalance: float | None
     # List of payments made in the period
-    releases: List[LoanPaymentRelease] | None
+    releases: list[LoanPaymentRelease] | None
 
 
 @dataclass
@@ -279,7 +279,7 @@ class Loan:
     # Date when the loan was contracted
     contractDate: Date | None
     # Date when the loan was contracted
-    disbursementDates: List[Date] | None
+    disbursementDates: list[Date] | None
     # Loan settlement date
     settlementDate: Date | None
     # Loan contracted value
@@ -303,13 +303,13 @@ class Loan:
     # Consignor CNPJ
     cnpjConsignee: str | None
     # Loan interest rates
-    interestRates: List[LoanInterestRate] | None
+    interestRates: list[LoanInterestRate] | None
     # List that brings the information of the tariffs agreed in the contract.
-    contractedFees: List[LoanContractedFee] | None
+    contractedFees: list[LoanContractedFee] | None
     # List that brings the charges agreed in the contract
-    contractedFinanceCharges: List[LoanContractedFinanceCharge] | None
+    contractedFinanceCharges: list[LoanContractedFinanceCharge] | None
     # Loan warranties
-    warranties: List[LoanWarranty] | None
+    warranties: list[LoanWarranty] | None
     # Set of information regarding the remaining term and the installments of a loan credit operation
     installments: LoanInstallments | None
     # Loan contract payment data

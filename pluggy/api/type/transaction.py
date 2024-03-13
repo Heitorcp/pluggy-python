@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional
 
 from pluggy.api.type.common import CurrencyCode, PageFilters
 
@@ -98,13 +98,15 @@ class CreditCardMetadata:
     purchaseDate: Optional[datetime]
 
 
-class TransactionFilters(TypedDict):
+@dataclass
+class TransactionFilters():
     pageFilters: PageFilters
     to: Optional[str] = None
     from_: Optional[str] = None
 
 
-class Transaction(TypedDict):
+@dataclass
+class Transaction():
     # Primary identifier of the transaction
     id: str
     # Primary identifier of the Account

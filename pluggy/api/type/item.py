@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum, auto
-from typing import Dict, List, Literal, Optional, TypeVar
+from typing import Literal, Optional
 
 from .connector import Connector, ConnectorCredential, ProductType
 from .execution import ExecutionErrorResult, ExecutionStatus
@@ -60,7 +60,7 @@ class ItemProductState:
     # Date when product was last collected for this Item, null if it has never been. */
     lastUpdatedAt: date | None
     # If product was not collected, this field will provide more detailed info about the reason. */
-    warnings: Optional[List[ItemProductStepWarning]]
+    warnings: Optional[list[ItemProductStepWarning]]
 
 
 @dataclass
@@ -107,7 +107,7 @@ class UserAction:
     # Type of user action to be done */
     type: Literal['qr', 'authorize-access']
     # Unstructured properties that provide additional context of the user action. */
-    attributes: Dict[str, str]
+    attributes: dict[str, str]
     # Parameter expiration date, action should be done before this time. */
     expiresAt: date
 
@@ -156,8 +156,8 @@ class CreateItemOptions:
     # Products to include in item execution and collection steps. Optional.
     # If not specified, all products available to your subscription level will be collected.
     #
-    products: Optional[List[ProductType]]
+    products: Optional[list[ProductType]]
 
 
 # The Item Create/Update parameters object to submit, which contains the needed user credentials.
-Parameters = Dict[str, str]
+Parameters = dict[str, str]

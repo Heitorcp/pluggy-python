@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date as Date
-from typing import Dict, List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
 from .execution import TriggeredBy
 
@@ -54,7 +54,7 @@ class CreateWebhook:
     # Url where notifications of events will be sent
     url: str
     # Object to specify headers in your webhook notifications
-    headers: Optional[Dict[str, str]] | None
+    headers: Optional[dict[str, str]] | None
 
 
 # @dataclass
@@ -96,4 +96,4 @@ class WebhookEventPayload:
     data: Optional[Data] = None
     clientId: Optional[str] = None
     accountId: Optional[str] = None
-    transactionIds: Optional[List[str]] = None
+    transactionIds: Optional[list[str]] = None

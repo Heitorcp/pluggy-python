@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date as Date
-from typing import List, Literal
+from typing import Literal
 
 
 @dataclass
@@ -53,13 +53,13 @@ class IdentityResponse:
     # Complete name of the account owner
     fullName: str | None
     # List of associated phone numbers
-    phoneNumbers: List[PhoneNumber] | None
+    phoneNumbers: list[PhoneNumber] | None
     # List of associated emails
-    emails: List[Email] | None
+    emails: list[Email] | None
     # List of associated phisical addresses
-    addresses: List[Address] | None
+    addresses: list[Address] | None
     # List of associated personal relationships
-    relations: List[IdentityRelation] | None
+    relations: list[IdentityRelation] | None
     # The investor's personality and motivation for investing
     investorProfile: Literal['Conservative', 'Moderate', 'Aggressive', None]
     # Date of the first time that the Identity was recovered

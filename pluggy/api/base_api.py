@@ -1,5 +1,5 @@
 import json as json
-from typing import Any, Dict, List, Optional, TypedDict, Union
+from typing import Any, Optional, TypedDict, Union
 
 import httpx
 import requests
@@ -8,7 +8,7 @@ from pluggy.api.type.common import PageResponse
 
 from .config import Config
 
-QueryParameters = Dict[str, Union[int, List[int], str, List[str], bool]]
+QueryParameters = dict[str, Union[int, list[int], str, list[str], bool]]
 
 
 class ClientParams(TypedDict):
@@ -46,7 +46,7 @@ class BaseApi:
             'content-type': 'application/json',
         }
 
-    def map_to_query_string(self, params: Dict[str, object]) -> str:
+    def map_to_query_string(self, params: dict[str, QueryParameters]) -> str:
         if not params:
             return ''
 
@@ -100,7 +100,7 @@ class BaseApi:
             return response.json()
 
         except httpx.HTTPError as error:
-            print(f'[Pluggy SDK] HTTP request failed: {error.response.text}')
+            print(f'[Pluggy SDK] HTTP request failed: {error}')
             raise error
         except Exception as error:
             print(f'[Pluggy SDK] Error: {error}')
@@ -110,7 +110,7 @@ class BaseApi:
         self,
         endpoint: str,
         params: Optional[QueryParameters],
-        body: Optional[Dict[str, object]],
+        body: Optional[dict[str, object]],
     ):
         return await self.create_mutation_request(
             endpoint=endpoint, params=params, body=body, method='POST'
@@ -120,17 +120,17 @@ class BaseApi:
         self,
         endpoint: str,
         params: Optional[QueryParameters],
-        body: Optional[Dict[str, object]],
+        body: Optional[dict[str, object]],
     ):
         return await self.create_mutation_request(
-            endpoint, params, body, method='PUT'
+            'PUT',endpoint, params, body
         )
 
     async def create_patch_request(
         self,
         endpoint: str,
         params: Optional[QueryParameters] = None,
-        body: Optional[Dict[str, object]] = None,
+        body: Optional[dict[str, object]] = None,
     ):
         return await self.create_mutation_request(
             'PATCH', endpoint, params, body
@@ -140,7 +140,7 @@ class BaseApi:
         self,
         endpoint: str,
         params: Optional[QueryParameters] = None,
-        body: Optional[Dict[str, object]] = None,
+        body: Optional[dict[str, object]] = None,
     ):
         return await self.create_mutation_request(
             'DELETE', endpoint, params, body
@@ -150,8 +150,8 @@ class BaseApi:
         self,
         method: str,
         endpoint: str,
-        params: Optional[Dict[str, Any]] = None,
-        body: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
+        body: Optional[dict[str, Any]] = None,
     ) -> Any:
         api_key = await self.get_api_key()
         url = f'{self.base_url}/{endpoint}{self.map_to_query_string(params)}'
