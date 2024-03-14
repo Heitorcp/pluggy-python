@@ -39,11 +39,11 @@ class PluggyClient(BaseApi):
     ):
         super().__init__(client_id, client_secret, session, base_url, api_key)
 
-    async def fetch_connectors(self, options: ConnectorFilters[PageResponse] = {}):
+    async def fetch_connectors(self, options: ConnectorFilters = {}) -> PageResponse:
         """ "Fetch all available connectors"""
         return await self.create_get_request('connectors', options)
 
-    async def fetch_connector(self, id: int):
+    async def fetch_connector(self, id: int) -> PageResponse:
         """Fetch a single connector"""
         return await self.create_get_request(endpoint=f'connectors/{id}')
 
@@ -160,7 +160,7 @@ class PluggyClient(BaseApi):
             endpoint='accounts', params=params
         )
 
-    async def fetch_account(self, id: str) -> PageResponse[Account]:
+    async def fetch_account(self, id: str) -> PageResponse:
         """Fetch a single account
 
         Parameters
