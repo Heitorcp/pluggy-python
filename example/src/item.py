@@ -41,6 +41,7 @@ async def retrieve_item():
         except Exception as e:
             raise e
 
+#Delete endpoint not working!
 async def delete_item():
 
     async with httpx.AsyncClient() as session:
@@ -51,15 +52,16 @@ async def delete_item():
             item = await client.create_item(PLUGGY_BANK_CONNECTOR, None, body = PLUGGY_BANK_CREDENTIALS) 
 
             #fetch the sadbox item 
-            deleted_item = await client.delete_item(item['id']) 
+            await client.delete_item(item['id']) 
 
-            if deleted_item:
-                print("Item retrieved successfully!", fetch_item)
+            #verifying that the item was deleted 
+            item_deleted = await client.fetch_item(item['id'])
+            print(item_deleted)
 
         except Exception as e:
             raise e
 
 if __name__ == "__main__":
-    asyncio.run(retrieve_item())
+    asyncio.run(delete_item())
 
 
