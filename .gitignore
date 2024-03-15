@@ -5,3 +5,7 @@ env
 
 __pycache__
 *.pyc
+
+.mypy* 
+
+*.json
