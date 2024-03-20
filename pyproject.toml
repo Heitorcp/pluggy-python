@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pluggy-python"
+name = "pypluggy"
 version = "0.1.0"
 description = "Unofficial Python SDK for Pluggy API"
 authors = ["Heitor Carvalho Pinheiro <heitor.c.pinheiro@hotmail.com>"]
@@ -32,19 +32,18 @@ mkdocstrings-python = "^1.8.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
- 
- [tool.pytest.ini_options] 
- pythonpath = "." 
- addopts = "--doctest-modules" 
 
- [tool.isort] 
- profile = "black" 
- line_length = 79 
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--doctest-modules"
 
- [tool.taskipy.tasks] 
- lint = "blue . && isort ."  
- docs = "mkdocs serve" 
+[tool.isort]
+profile = "black"
+line_length = 79
 
- [tool.mypy] 
- warn_unused_configs = true 
- 
+[tool.taskipy.tasks]
+lint = "blue . && isort ."
+docs = "mkdocs serve"
+
+[tool.mypy]
+warn_unused_configs = true

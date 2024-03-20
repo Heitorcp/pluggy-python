@@ -1,9 +1,9 @@
-import asyncio 
+import asyncio
 import httpx
 from config import Settings
-import json 
+import json
 
-from pluggy.api.client import PluggyClient
+from pypluggy.api.client import PluggyClient
 
 
 async def fetch_connectors(export_to_json: bool = False):
@@ -17,13 +17,14 @@ async def fetch_connectors(export_to_json: bool = False):
             print(connectors)
 
             if export_to_json:
-                json_str = json.dumps(connectors, indent=4) 
+                json_str = json.dumps(connectors, indent=4)
 
-                with open('connectors.json', 'w') as json_file:
+                with open("connectors.json", "w") as json_file:
                     json_file.write(json_str)
 
     except Exception as e:
         raise e
+
 
 if __name__ == "__main__":
     asyncio.run(fetch_connectors(export_to_json=True))

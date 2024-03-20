@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from pluggy.api.type.common import PageResponse
+from pypluggy.api.type.common import PageResponse
 
 
 @dataclass
