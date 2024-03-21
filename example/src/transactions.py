@@ -21,13 +21,15 @@ async def get_all_transactions(account_id: str, export_to_json: bool = False):
             json_file.write(json_str)
 
 
-async def update_txs_category(tx_id, category_id):
+async def update_txs_category(transaction_id, category_id):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(
             Settings.CLIENT_ID, Settings.CLIENT_SECRET, session=session
         )
         try:
-            await client.update_transaction_category(tx_id, category_id)
+            await client.update_transaction_category(
+                transaction_id, category_id
+            )
             print('Transaction category successfully updated.')
         except BaseException as e:
             print(f'An Exception occured {e}')

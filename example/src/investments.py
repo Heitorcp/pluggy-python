@@ -6,23 +6,22 @@ from utils import PLUGGY_BANK_CONNECTOR, PLUGGY_BANK_CREDENTIALS
 
 from config import Settings
 from pypluggy.api.client import PluggyClient
+from pypluggy.api.type.investment import InvestmentType
 
 
-async def get_investments(export_to_json: bool = False):
+async def get_investments(
+    item_id: str, type: InvestmentType, export_to_json: bool = False
+):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(
             Settings.CLIENT_ID, Settings.CLIENT_SECRET, session=session
         )
 
-        # Criando um Item usando a SandBox
-        body = PLUGGY_BANK_CREDENTIALS
-        item = await client.create_item(PLUGGY_BANK_CONNECTOR, None, body)
-
         investments = await client.fetch_investments(
-            item_id=item['id'], type='EQUITY'
+            item_id=item_id, type=type
         )
 
-        print('Investments successfully retrieved!')
+        print('Investments successfully retrieved!\n')
         print(investments)
 
         if export_to_json:
@@ -32,4 +31,4 @@ async def get_investments(export_to_json: bool = False):
 
 
 if __name__ == '__main__':
-    asyncio.run(get_investments())
+    asyncio.run(get_investments(item_id='', type=''))
