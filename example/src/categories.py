@@ -1,10 +1,9 @@
-import asyncio
-import json
-
+import asyncio 
+import json 
+from config import Settings
 import httpx
 
-from config import Settings
-from pluggy.api.client import PluggyClient
+from pypluggy.api.client import PluggyClient
 
 
 async def fetch_categories(export_to_json: bool = False):
@@ -18,11 +17,10 @@ async def fetch_categories(export_to_json: bool = False):
         if export_to_json:
             json_str = json.dumps(categories, indent=4)
 
-            with open('categories.json', 'w', encoding='utf-8') as json_file:
+            with open("categories.json", "w", encoding="utf-8") as json_file:
                 json_file.write(json_str)
 
         print(categories)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(fetch_categories(export_to_json=True))

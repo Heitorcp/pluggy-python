@@ -2,7 +2,7 @@ import datetime
 from dataclasses import dataclass
 from typing import Literal
 
-from pluggy.api.type.common import CurrencyCode, PageFilters
+from pypluggy.api.type.common import CurrencyCode, PageFilters
 
 INVESTMENT_TYPES = [
     'MUTUAL_FUND',
