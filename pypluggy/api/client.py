@@ -41,11 +41,11 @@ class PluggyClient(BaseApi):
 
     async def fetch_connectors(self, options: ConnectorFilters = {}) -> PageResponse:
         """ "Fetch all available connectors"""
-        return await self.create_get_request('connectors', options)
+        return await self.create_get_request("connectors", options)
 
     async def fetch_connector(self, id: int) -> PageResponse:
         """Fetch a single connector"""
-        return await self.create_get_request(endpoint=f'connectors/{id}')
+        return await self.create_get_request(endpoint=f"connectors/{id}")
 
     async def create_item(
         self,
@@ -68,23 +68,17 @@ class PluggyClient(BaseApi):
         """
 
         body = {
-            'parameters': {
-                key: value for key, value in body.items() if value is not None
-            },
-            'connectorId': connector_id,
+            "parameters": {key: value for key, value in body.items() if value is not None},
+            "connectorId": connector_id,
         }
 
-        return await self.create_post_request(
-            endpoint='items', params=None, body=body
-        )
+        return await self.create_post_request(endpoint="items", params=None, body=body)
 
     async def fetch_item(self, id: int):
         """Retreives a specific Item by its ID"""
-        return await self.create_get_request(f'items/{id}')
+        return await self.create_get_request(f"items/{id}")
 
-    async def validate_parameters(
-        self, id: int, parameters: Parameters
-    ) -> ValidationResult:
+    async def validate_parameters(self, id: int, parameters: Parameters) -> ValidationResult:
         """Check that connector parameters are valid
 
         Parameters
@@ -96,13 +90,11 @@ class PluggyClient(BaseApi):
         -------
         * ValidationResult: An object with the info of which parameters are wrong
         """
-        return await self.create_post_request(
-            f'connectors/{id}/validate', None, parameters
-        )
+        return await self.create_post_request(f"connectors/{id}/validate", None, parameters)
 
     async def delete_item(self, id: str):
         """Deletes an Item by its ID"""
-        return await self.create_delete_request(f'items/{id}')
+        return await self.create_delete_request(f"items/{id}")
 
     async def update_item(
         self,
@@ -124,9 +116,9 @@ class PluggyClient(BaseApi):
         * Item: An item object
         """
         return await self.create_patch_request(
-            f'items/{id}',
+            f"items/{id}",
             None,
-            {'id': id, 'parameters': parameters, 'options': options},
+            {"id": id, "parameters": parameters, "options": options},
         )
 
     async def update_item_mfa(self, id: str, parameters: object):
@@ -137,13 +129,9 @@ class PluggyClient(BaseApi):
         ----------
         * id (str): Item Id
         """
-        return await self.create_post_request(
-            f'items/{id}/mfa', None, parameters
-        )
+        return await self.create_post_request(f"items/{id}/mfa", None, parameters)
 
-    async def fetch_accounts(
-        self, item_id: str, type: Optional[AccountType] = None
-    ):
+    async def fetch_accounts(self, item_id: str, type: Optional[AccountType] = None):
         """Fetch accounts
 
         Parameters
@@ -155,10 +143,8 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse: Paged response of accounts
         """
-        params = {'itemId': item_id, 'type': type}
-        return await self.create_get_request(
-            endpoint='accounts', params=params
-        )
+        params = {"itemId": item_id, "type": type}
+        return await self.create_get_request(endpoint="accounts", params=params)
 
     async def fetch_account(self, id: str) -> PageResponse:
         """Fetch a single account
@@ -171,20 +157,16 @@ class PluggyClient(BaseApi):
         -------
         * Account: An account object
         """
-        return await self.create_get_request(endpoint=f'accounts/{id}')
+        return await self.create_get_request(endpoint=f"accounts/{id}")
 
-    async def fetch_transactions(
-        self, account_id: str, options: TransactionFilters = {}
-    ) -> PageResponse:
+    async def fetch_transactions(self, account_id: str, options: TransactionFilters = {}) -> PageResponse:
         """Fetch transactions from an account"""
         return await self.create_get_request(
-            endpoint='transactions',
-            params={**options, 'accountId': account_id},
+            endpoint="transactions",
+            params={**options, "accountId": account_id},
         )
 
-    async def fetch_all_transactions(
-        self, account_id: str
-    ) -> list[Transaction]:
+    async def fetch_all_transactions(self, account_id: str) -> list[Transaction]:
         """Fetch all transactions from an account
 
         Parameters
@@ -197,33 +179,25 @@ class PluggyClient(BaseApi):
         """
         MAX_PAGE_SIZE = 500
 
-        result = await self.fetch_transactions(
-            account_id, options={'pageSize': MAX_PAGE_SIZE}
-        )
+        result = await self.fetch_transactions(account_id, options={"pageSize": MAX_PAGE_SIZE})
 
-        if result['totalPages'] == 1:
-            return result['results']
+        if result["totalPages"] == 1:
+            return result["results"]
 
         else:
             transactions: list = []
             page = 1
 
-            while page < result['totalPages']:
-                paginated_transaction = await self.fetch_transactions(
-                    account_id, options={'page': page}
-                )
+            while page < result["totalPages"]:
+                paginated_transaction = await self.fetch_transactions(account_id, options={"page": page})
                 transactions.extend(paginated_transaction)
                 page += 1
 
             return transactions
 
-    async def update_transaction_category(
-        self, id: str, category_id: str
-    ) -> Transaction:
+    async def update_transaction_category(self, id: str, category_id: str) -> Transaction:
         """Post user category for transaction"""
-        return await self.create_patch_request(
-            f'transactions/{id}', None, {'categoryId': category_id}
-        )
+        return await self.create_patch_request(f"transactions/{id}", None, {"categoryId": category_id})
 
     async def fetch_transaction(self, id: str) -> Transaction:
         """Fetch a single transaction
@@ -236,7 +210,7 @@ class PluggyClient(BaseApi):
         -------
         * Transaction: A Transaction object
         """
-        return await self.create_get_request(f'transactions/{id}')
+        return await self.create_get_request(f"transactions/{id}")
 
     async def fetch_investments(
         self,
@@ -255,8 +229,8 @@ class PluggyClient(BaseApi):
         * PageResponse: Paged response of investments
         """
         return await self.create_get_request(
-            'investments',
-            {'options': options, 'itemId': item_id, 'type': type},
+            "investments",
+            {"options": options, "itemId": item_id, "type": type},
         )
 
     async def fetch_investment(self, id: str) -> Investment:
@@ -270,7 +244,7 @@ class PluggyClient(BaseApi):
         -------
         * Investment: An investment object
         """
-        return await self.create_get_request(f'investments/{id}')
+        return await self.create_get_request(f"investments/{id}")
 
     async def fetch_investment_transactions(
         self, investment_id: str, options: TransactionFilters = {}
@@ -287,13 +261,11 @@ class PluggyClient(BaseApi):
         * PageResponse[List[InvestmentTransaction]]: Object which contains the transactions list and related paging data
         """
         return await self.create_get_request(
-            f'investments/{investment_id}/transactions',
-            {'options': options, 'investmentId': investment_id},
+            f"investments/{investment_id}/transactions",
+            {"options": options, "investmentId": investment_id},
         )
 
-    async def fetch_opportunities(
-        self, item_id: str, options: OpportunityFilters = {}
-    ) -> PageResponse:
+    async def fetch_opportunities(self, item_id: str, options: OpportunityFilters = {}) -> PageResponse:
         """Fetch opportunities from an Item
 
         Parameters
@@ -305,13 +277,9 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse: Paged response of opportunities
         """
-        return await self.create_get_request(
-            'opportunities', {'options': options, 'itemId': item_id}
-        )
+        return await self.create_get_request("opportunities", {"options": options, "itemId": item_id})
 
-    async def fetch_loans(
-        self, item_id: str, options: PageFilters = {}
-    ) -> PageResponse:
+    async def fetch_loans(self, item_id: str, options: PageFilters = {}) -> PageResponse:
         """Fetch loans from an Item
 
         Parameters
@@ -323,9 +291,7 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse: Paged response of loans
         """
-        return await self.create_get_request(
-            'loans', {'options': options, 'itemId': item_id}
-        )
+        return await self.create_get_request("loans", {"options": options, "itemId": item_id})
 
     async def fetch_loan(self, id: str) -> Loan:
         """Fetch loan by id
@@ -338,7 +304,7 @@ class PluggyClient(BaseApi):
         -------
         * Loan: Loan object, if found
         """
-        return await self.create_get_request(f'loans/{id}')
+        return await self.create_get_request(f"loans/{id}")
 
     async def fetch_identity(self, id: str) -> IdentityResponse:
         """Fetch the identity resource
@@ -347,11 +313,9 @@ class PluggyClient(BaseApi):
         -------
         * IdentityResponse: An identity object
         """
-        return await self.create_get_request(f'identity/{id}')
+        return await self.create_get_request(f"identity/{id}")
 
-    async def fetch_identity_by_item_id(
-        self, item_id: str
-    ) -> IdentityResponse:
+    async def fetch_identity_by_item_id(self, item_id: str) -> IdentityResponse:
         """Fetch the identity resource by its Item ID
 
         Parameters
@@ -362,7 +326,7 @@ class PluggyClient(BaseApi):
         -------
         * IdentityResponse: An identity object
         """
-        return await self.create_get_request(f'identity?itemId={item_id}')
+        return await self.create_get_request(f"identity?itemId={item_id}")
 
     async def fetch_categories(self) -> PageResponse:
         """Fetch all available categories
@@ -371,7 +335,7 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse: A page response of categories
         """
-        return await self.create_get_request('categories')
+        return await self.create_get_request("categories")
 
     async def fetch_category(self, id: str) -> Category:
         """Fetch a single category
@@ -384,7 +348,7 @@ class PluggyClient(BaseApi):
         -------
         * Category: A category object
         """
-        return await self.create_get_request(f'categories/{id}')
+        return await self.create_get_request(f"categories/{id}")
 
     async def fetch_webhooks(self) -> PageResponse:
         """Fetch all available webhooks
@@ -393,7 +357,7 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse[Webhook]: A paging response of webhooks
         """
-        return await self.create_get_request('webhooks')
+        return await self.create_get_request("webhooks")
 
     async def fetch_webhook(self, id: str) -> Webhook:
         """Fetch a single webhook
@@ -406,7 +370,7 @@ class PluggyClient(BaseApi):
         -------
         * Webhook: A webhook object
         """
-        return await self.create_get_request(f'webhooks/{id}')
+        return await self.create_get_request(f"webhooks/{id}")
 
     async def create_webhook(
         self,
@@ -427,12 +391,10 @@ class PluggyClient(BaseApi):
         * Webhook: The created webhook object.
         """
         return await self.create_post_request(
-            'webhooks', None, {'event': event, 'url': url, 'headers': headers}
+            "webhooks", None, {"event": event, "url": url, "headers": headers}
         )
 
-    async def update_webhook(
-        self, id: str, updated_webhook_params: UpdateWebhook
-    ) -> Webhook:
+    async def update_webhook(self, id: str, updated_webhook_params: UpdateWebhook) -> Webhook:
         """Updates a webhook.
 
         Parameters
@@ -444,13 +406,11 @@ class PluggyClient(BaseApi):
         -------
         * Webhook: The updated webhook
         """
-        return await self.create_patch_request(
-            f'webhooks/{id}', None, updated_webhook_params
-        )
+        return await self.create_patch_request(f"webhooks/{id}", None, updated_webhook_params)
 
     async def delete_webhook(self, id: str) -> None:
         """Deletes a webhook"""
-        return await self.create_delete_request(f'webhooks/{id}')
+        return await self.create_delete_request(f"webhooks/{id}")
 
     async def fetch_income_reports(self, item_id: str) -> PageResponse:
         """Fetches all income reports for the past years provided by the Financial Institution.
@@ -463,13 +423,9 @@ class PluggyClient(BaseApi):
         -------
         * PageResponse: Paged response of income reports.
         """
-        return await self.create_get_request(
-            'income-reports', params={'itemId': item_id}
-        )
+        return await self.create_get_request("income-reports", params={"itemId": item_id})
 
-    async def create_connection_token(
-        self, item_id: str, options: Optional[ConnectTokenOptions]
-    ) -> str:
+    async def create_connection_token(self, item_id: str, options: Optional[ConnectTokenOptions]) -> str:
         """Creates a connection token that can be used as an API key to connect items from the frontend.
 
         Parameters
@@ -481,6 +437,4 @@ class PluggyClient(BaseApi):
         -------
         * str: Access token to connect items with restricted access
         """
-        return await self.create_post_request(
-            'connect_token', None, {'itemId': item_id, 'options': options}
-        )
+        return await self.create_post_request("connect_token", None, {"itemId": item_id, "options": options})

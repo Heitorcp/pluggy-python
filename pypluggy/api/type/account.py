@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 
-from pluggy.api.type.common import CurrencyCode
+from pypluggy.api.type.common import CurrencyCode
 
 ACCOUNT_TYPES = ['BANK', 'CREDIT']
 

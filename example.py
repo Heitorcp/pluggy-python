@@ -5,13 +5,13 @@ import os
 import httpx
 from dotenv import load_dotenv
 
-from pluggy.api.base_api import BaseApi
-from pluggy.api.client import PluggyClient
+from pypluggy.api.base_api import BaseApi
+from pypluggy.api.client import PluggyClient
 
 load_dotenv()
 
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 from functools import wraps
 
@@ -20,7 +20,7 @@ def inject_session(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
         async with httpx.AsyncClient() as session:
-            kwargs['session'] = session
+            kwargs["session"] = session
             return await func(*args, **kwargs)
 
     return wrapper
@@ -31,10 +31,6 @@ async def get_api_key(session=None):
     base_api = BaseApi(CLIENT_ID, CLIENT_SECRET, session=session)
     api_key = await base_api.get_api_key()
     print(api_key)
-
-
-
-
 
 
 async def fetch_connector(connector_id: int):
@@ -54,7 +50,7 @@ async def fetch_categories(export_to_json: bool = False):
         if export_to_json:
             json_str = json.dumps(categories, indent=4)
 
-            with open('categories.json', 'w', encoding='utf-8') as json_file:
+            with open("categories.json", "w", encoding="utf-8") as json_file:
                 json_file.write(json_str)
 
         print(categories)
@@ -64,7 +60,7 @@ async def create_item():
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
 
-        body = {'cpf': '1234567890', 'password': '12345'}
+        body = {"cpf": "1234567890", "password": "12345"}
 
         item = await client.create_item(212, None, body=body)
 
@@ -82,11 +78,9 @@ async def validate_parameters(connector_id):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
 
-        parameters = {'cpf': '1234567890', 'password': 123478}
+        parameters = {"cpf": "1234567890", "password": 123478}
 
-        result = await client.validate_parameters(
-            connector_id, parameters=parameters
-        )
+        result = await client.validate_parameters(connector_id, parameters=parameters)
 
         print(result)
 
@@ -108,15 +102,13 @@ async def update_item(item_id):
 
 
 @inject_session
-async def retrieve_all_transactions(
-    account_id, export_to_json: bool = True, session=None
-):
+async def retrieve_all_transactions(account_id, export_to_json: bool = True, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
     txs = await client.fetch_all_transactions(account_id)
     print(txs)
 
     if export_to_json:
-        with open('transactions.json', 'w') as json_file:
+        with open("transactions.json", "w") as json_file:
             json_str = json.dumps(txs, indent=4)
             json_file.write(json_str)
 
@@ -124,7 +116,7 @@ async def retrieve_all_transactions(
 async def retrieve_accounts(item_id):
     async with httpx.AsyncClient() as session:
         client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
-        accounts = await client.fetch_accounts(itemId=item_id, type='CREDIT')
+        accounts = await client.fetch_accounts(itemId=item_id, type="CREDIT")
         print(accounts)
 
 
@@ -150,15 +142,13 @@ async def fetch_transaction(tx_id, session=None):
 
 
 @inject_session
-async def fetch_all_transactions(
-    account_id, session=None, export_to_json: bool = False
-):
+async def fetch_all_transactions(account_id, session=None, export_to_json: bool = False):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
     txs = await client.fetch_all_transactions(account_id)
     print(txs)
     if export_to_json:
         json_str = json.dumps(txs, indent=4)
-        with open('transactions.json', 'w', encoding='utf-8') as f:
+        with open("transactions.json", "w", encoding="utf-8") as f:
             f.write(json_str)
     return
 
@@ -169,7 +159,7 @@ async def update_txs_category(tx_id, category_id, session=None):
     try:
         await client.update_transaction_category(tx_id, category_id)
     except BaseException as e:
-        print(f'An Exception occured {e}')
+        print(f"An Exception occured {e}")
         raise e
 
 
@@ -177,7 +167,7 @@ async def update_txs_category(tx_id, category_id, session=None):
 async def fetch_opportunities(item_id: str, session=None):
     client = PluggyClient(CLIENT_ID, CLIENT_SECRET, session=session)
 
-    options = {'page': 1, 'pageSize': 20}
+    options = {"page": 1, "pageSize": 20}
 
     opportunities = await client.fetch_opportunities(item_id, options)
     print(opportunities)
@@ -214,5 +204,5 @@ async def create_webhook(session=None):
     await client.create_webhook()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(fetch_connectors())
