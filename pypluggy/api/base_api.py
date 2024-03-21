@@ -32,7 +32,7 @@ class BaseApi:
 
         # Validate client_id and client_secret
         if not client_id or not client_secret:
-            raise ValueError("Missing authorization for API communication")
+            raise ValueError('Missing authorization for API communication')
 
         # Set base_url to PLUGGY_API_URL if not provided
         self.base_url = Config.PLUGGY_API_URL
@@ -42,16 +42,22 @@ class BaseApi:
         self.client_id = client_id
         self.client_secret = client_secret
         self.default_headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
+            'accept': 'application/json',
+            'content-type': 'application/json',
         }
 
     def map_to_query_string(self, params: dict[str, QueryParameters]) -> str:
         if not params:
-            return ""
+            return ''
 
-        query = "&".join([f"{key}={params[key]}" for key in params if params[key] is not None])
-        return f"?{query}" if query else ""
+        query = '&'.join(
+            [
+                f'{key}={params[key]}'
+                for key in params
+                if params[key] is not None
+            ]
+        )
+        return f'?{query}' if query else ''
 
     async def get_api_key(self) -> str:
 
@@ -59,16 +65,18 @@ class BaseApi:
             return self.api_key
 
         json_data = {
-            "clientId": self.client_id,
-            "clientSecret": self.client_secret,
+            'clientId': self.client_id,
+            'clientSecret': self.client_secret,
         }
 
-        url = f"{self.base_url}/auth"
+        url = f'{self.base_url}/auth'
 
         try:
-            response = await self.session.post(url, json=json_data, headers=self.default_headers)
+            response = await self.session.post(
+                url, json=json_data, headers=self.default_headers
+            )
             if response.status_code == 200:
-                self.api_key = json.loads(response.text)["apiKey"]
+                self.api_key = json.loads(response.text)['apiKey']
                 return self.api_key
         except BaseException as e:
             raise e
@@ -79,21 +87,23 @@ class BaseApi:
 
         try:
             api_key = await self.get_api_key()
-            url = f"{self.base_url}/{endpoint}"
+            url = f'{self.base_url}/{endpoint}'
 
             if params:
-                url = f"{self.base_url}/{endpoint}/{self.map_to_query_string(params)}"
+                url = f'{self.base_url}/{endpoint}/{self.map_to_query_string(params)}'
 
-            response = await self.session.get(url, headers={**self.default_headers, "X-API-KEY": api_key})
+            response = await self.session.get(
+                url, headers={**self.default_headers, 'X-API-KEY': api_key}
+            )
             response.raise_for_status()
 
             return response.json()
 
         except httpx.HTTPError as error:
-            print(f"[Pluggy SDK] HTTP request failed: {error}")
+            print(f'[Pluggy SDK] HTTP request failed: {error}')
             raise error
         except Exception as error:
-            print(f"[Pluggy SDK] Error: {error}")
+            print(f'[Pluggy SDK] Error: {error}')
             raise error
 
     async def create_post_request(
@@ -102,7 +112,9 @@ class BaseApi:
         params: Optional[QueryParameters],
         body: Optional[dict[str, object]],
     ):
-        return await self.create_mutation_request(endpoint=endpoint, params=params, body=body, method="POST")
+        return await self.create_mutation_request(
+            endpoint=endpoint, params=params, body=body, method='POST'
+        )
 
     async def create_put_request(
         self,
@@ -110,7 +122,9 @@ class BaseApi:
         params: Optional[QueryParameters],
         body: Optional[dict[str, object]],
     ):
-        return await self.create_mutation_request("PUT", endpoint, params, body)
+        return await self.create_mutation_request(
+            'PUT', endpoint, params, body
+        )
 
     async def create_patch_request(
         self,
@@ -118,7 +132,9 @@ class BaseApi:
         params: Optional[QueryParameters] = None,
         body: Optional[dict[str, object]] = None,
     ):
-        return await self.create_mutation_request("PATCH", endpoint, params, body)
+        return await self.create_mutation_request(
+            'PATCH', endpoint, params, body
+        )
 
     async def create_delete_request(
         self,
@@ -126,7 +142,9 @@ class BaseApi:
         params: Optional[QueryParameters] = None,
         body: Optional[dict[str, object]] = None,
     ):
-        return await self.create_mutation_request("DELETE", endpoint, params, body)
+        return await self.create_mutation_request(
+            'DELETE', endpoint, params, body
+        )
 
     async def create_mutation_request(
         self,
@@ -136,26 +154,30 @@ class BaseApi:
         body: Optional[dict[str, Any]] = None,
     ) -> Any:
         api_key = await self.get_api_key()
-        url = f"{self.base_url}/{endpoint}{self.map_to_query_string(params)}"
+        url = f'{self.base_url}/{endpoint}{self.map_to_query_string(params)}'
 
         try:
             if body:
-                body = {key: value for key, value in body.items() if value is not None}
+                body = {
+                    key: value
+                    for key, value in body.items()
+                    if value is not None
+                }
 
-                response = await self.session.request(
-                    method,
-                    url,
-                    headers={**self.default_headers, "X-API-KEY": api_key},
-                    json=body,
-                )
+            response = await self.session.request(
+                method,
+                url,
+                headers={**self.default_headers, 'X-API-KEY': api_key},
+                json=body,
+            )
 
-                response.raise_for_status()
+            response.raise_for_status()
 
-                return response.json()
+            return response.json()
 
         except requests.HTTPError as error:
-            print(f"[Pluggy SDK] HTTP request failed: {error.response.text}")
+            print(f'[Pluggy SDK] HTTP request failed: {error.response.text}')
             raise error
         except Exception as error:
-            print(f"[Pluggy SDK] Error: {error}")
+            print(f'[Pluggy SDK] Error: {error}')
             raise error

@@ -250,6 +250,7 @@ class InvestmentInstitution:
     # Number identifier for the institution CNPJ / Other
     number: str | None
 
+
 @dataclass
 class Investment:
     id: str

@@ -99,14 +99,14 @@ class CreditCardMetadata:
 
 
 @dataclass
-class TransactionFilters():
+class TransactionFilters:
     pageFilters: PageFilters
     to: Optional[str] = None
     from_: Optional[str] = None
 
 
 @dataclass
-class Transaction():
+class Transaction:
     # Primary identifier of the transaction
     id: str
     # Primary identifier of the Account
