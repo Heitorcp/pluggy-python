@@ -4,7 +4,7 @@ import json
 import httpx
 
 from config import Settings
-from pluggy.api.client import PluggyClient
+from pypluggy.api.client import PluggyClient
 
 
 async def retrieve_identity(item_id: str, export_to_json: bool = False):

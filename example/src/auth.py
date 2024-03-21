@@ -3,7 +3,7 @@ import asyncio
 import httpx
 
 from config import Settings
-from pluggy.api.base_api import BaseApi
+from pypluggy.api.base_api import BaseApi
 
 
 async def auth_user() -> str:

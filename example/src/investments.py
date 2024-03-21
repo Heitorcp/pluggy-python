@@ -5,7 +5,7 @@ import httpx
 from utils import PLUGGY_BANK_CONNECTOR, PLUGGY_BANK_CREDENTIALS
 
 from config import Settings
-from pluggy.api.client import PluggyClient
+from pypluggy.api.client import PluggyClient
 
 
 async def get_investments(export_to_json: bool = False):
