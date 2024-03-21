@@ -23,5 +23,5 @@ async def get_opportunities(item_id: str):
 
 if __name__ == '__main__':
     asyncio.run(
-        get_opportunities(item_id='f2213b33-b1db-4f56-8d8e-f38b053e7cb3')
+        get_opportunities(item_id='')
     )
