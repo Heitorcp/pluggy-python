@@ -206,11 +206,12 @@ class PluggyClient(BaseApi):
             transactions: list = []
             page = 1
 
-            while page < result['totalPages']:
+            while page <= result['totalPages']:
+                print("current_page", page)
                 paginated_transaction = await self.fetch_transactions(
-                    account_id, options={'page': page}
+                    account_id, options={'page': page, 'pageSize':MAX_PAGE_SIZE}
                 )
-                transactions.extend(paginated_transaction)
+                transactions.extend(paginated_transaction['results'])
                 page += 1
 
             return transactions
