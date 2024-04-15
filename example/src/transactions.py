@@ -8,7 +8,7 @@ from pypluggy.api.client import PluggyClient
 
 
 async def get_all_transactions(account_id: str, export_to_json: bool = False):
-    async with httpx.AsyncClient as session:
+    async with httpx.AsyncClient() as session:
         client = PluggyClient(
             Settings.CLIENT_ID, Settings.CLIENT_SECRET, session=session
         )
